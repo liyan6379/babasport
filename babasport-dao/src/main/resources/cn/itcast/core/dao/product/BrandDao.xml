@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.itcast.core.dao.product.BrandDao">
+
+<resultMap id="BaseResultMap" type="cn.itcast.core.bean.product.Brand" >
+    <id column="brand_id" property="brandId" jdbcType="BIGINT" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="brand_img_url" property="brandImgUrl" jdbcType="VARCHAR" />
+    <result column="web_site" property="webSite" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="is_display" property="isDisplay" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    brand_id, brand_name, description, brand_img_url, web_site, sort, is_display
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from bbs_brand
+    where brand_id = #{brandId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from bbs_brand
+    where brand_id = #{brandId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" >
+    insert into bbs_brand (brand_id, brand_name, description, 
+      brand_img_url, web_site, sort, 
+      is_display)
+    values (#{brandId,jdbcType=BIGINT}, #{brandName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{brandImgUrl,jdbcType=VARCHAR}, #{webSite,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, 
+      #{isDisplay,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.itcast.core.bean.product.Brand" >
+    insert into bbs_brand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="brandId != null" >
+        brand_id,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="brandImgUrl != null" >
+        brand_img_url,
+      </if>
+      <if test="webSite != null" >
+        web_site,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="isDisplay != null" >
+        is_display,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="brandId != null" >
+        #{brandId,jdbcType=BIGINT},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="brandImgUrl != null" >
+        #{brandImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="webSite != null" >
+        #{webSite,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="isDisplay != null" >
+        #{isDisplay,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.itcast.core.bean.product.Brand" >
+    update bbs_brand
+    <set >
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="brandImgUrl != null" >
+        brand_img_url = #{brandImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="webSite != null" >
+        web_site = #{webSite,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="isDisplay != null" >
+        is_display = #{isDisplay,jdbcType=BIT},
+      </if>
+    </set>
+    where brand_id = #{brandId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.itcast.core.bean.product.Brand" >
+    update bbs_brand
+    set brand_name = #{brandName,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      brand_img_url = #{brandImgUrl,jdbcType=VARCHAR},
+      web_site = #{webSite,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER},
+      is_display = #{isDisplay,jdbcType=BIT}
+    where brand_id = #{brandId,jdbcType=BIGINT}
+  </update>
+
+  <!-- 查询 -->
+  <select id="selectBrandListByQuery"  resultMap="BaseResultMap">
+    select brand_id , brand_name ,description,brand_img_url,sort,is_display
+    from bbs_brand
+    <where>
+      <if test="brandName != null">
+        brand_name like "%"#{brandName}"%"
+      </if>
+      <if test="isDisplay != null">
+        and is_display = #{isDisplay}
+      </if>
+    </where>
+    <if test="startRow != null">
+      limit #{startRow},#{pageSize}
+    </if>
+  </select>
+  <!-- 查询总条数-->
+  <select id="selectCount"  resultType="Integer">
+    select count(1)
+    from bbs_brand
+    <where>
+      <if test="brandName != null">
+        brand_name like "%"#{brandName}"%"
+      </if>
+      <if test="isDisplay != null">
+        and is_display = #{isDisplay}
+      </if>
+    </where>
+  </select>
+</mapper>
